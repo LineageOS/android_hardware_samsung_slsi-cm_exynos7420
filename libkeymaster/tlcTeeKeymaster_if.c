@@ -30,6 +30,7 @@
  */
 
 #include <stdlib.h>
+#include <string.h>
 
 #include "MobiCoreDriverApi.h"
 #include "tlTeeKeymaster_Api.h"
@@ -190,7 +191,7 @@ teeResult_t TEE_RSAGenerateKeyPair(
         pTci->command.header.commandId = CMD_ID_TEE_RSA_GEN_KEY_PAIR;
         pTci->rsagenkey.type        = keyType;
         pTci->rsagenkey.keysize     = keySize;
-        pTci->rsagenkey.keydata     = (uint32_t)mapInfo.sVirtualAddr;
+        pTci->rsagenkey.keydata     = (uintptr_t)mapInfo.sVirtualAddr;
         pTci->rsagenkey.keydatalen  = keyDataLength;
         pTci->rsagenkey.exponent    = exponent;
 
@@ -297,13 +298,13 @@ teeResult_t TEE_RSASign(
 
         /* Update TCI buffer */
         pTci->command.header.commandId = CMD_ID_TEE_RSA_SIGN;
-        pTci->rsasign.keydata = (uint32_t)keyMapInfo.sVirtualAddr;
+        pTci->rsasign.keydata = (uintptr_t)keyMapInfo.sVirtualAddr;
         pTci->rsasign.keydatalen = keyDataLength;
 
-        pTci->rsasign.plaindata = (uint32_t)plainMapInfo.sVirtualAddr;
+        pTci->rsasign.plaindata = (uintptr_t)plainMapInfo.sVirtualAddr;
         pTci->rsasign.plaindatalen = plainDataLength;
 
-        pTci->rsasign.signaturedata = (uint32_t)signatureMapInfo.sVirtualAddr;
+        pTci->rsasign.signaturedata = (uintptr_t)signatureMapInfo.sVirtualAddr;
         pTci->rsasign.signaturedatalen = *signatureDataLength;
 
         pTci->rsasign.algorithm = algorithm;
@@ -427,13 +428,13 @@ teeResult_t TEE_RSAVerify(
 
         /* Update TCI buffer */
         pTci->command.header.commandId = CMD_ID_TEE_RSA_VERIFY;
-        pTci->rsaverify.keydata = (uint32_t)keyMapInfo.sVirtualAddr;
+        pTci->rsaverify.keydata = (uintptr_t)keyMapInfo.sVirtualAddr;
         pTci->rsaverify.keydatalen = keyDataLength;
 
-        pTci->rsaverify.plaindata = (uint32_t)plainMapInfo.sVirtualAddr;
+        pTci->rsaverify.plaindata = (uintptr_t)plainMapInfo.sVirtualAddr;
         pTci->rsaverify.plaindatalen = plainDataLength;
 
-        pTci->rsaverify.signaturedata = (uint32_t)signatureMapInfo.sVirtualAddr;
+        pTci->rsaverify.signaturedata = (uintptr_t)signatureMapInfo.sVirtualAddr;
         pTci->rsaverify.signaturedatalen = signatureDataLength;
 
         pTci->rsaverify.algorithm = algorithm;
@@ -534,7 +535,7 @@ teeResult_t TEE_HMACKeyGenerate(
 
         /* Update TCI buffer */
         pTci->command.header.commandId = CMD_ID_TEE_HMAC_GEN_KEY;
-        pTci->hmacgenkey.keydata = (uint32_t)keyMapInfo.sVirtualAddr;
+        pTci->hmacgenkey.keydata = (uintptr_t)keyMapInfo.sVirtualAddr;
         pTci->hmacgenkey.keydatalen = keyDataLength;
 
         /* Notify the trustlet */
@@ -638,13 +639,13 @@ teeResult_t TEE_HMACSign(
 
         /* Update TCI buffer */
         pTci->command.header.commandId = CMD_ID_TEE_HMAC_SIGN;
-        pTci->hmacsign.keydata = (uint32_t)keyMapInfo.sVirtualAddr;
+        pTci->hmacsign.keydata = (uintptr_t)keyMapInfo.sVirtualAddr;
         pTci->hmacsign.keydatalen = keyDataLength;
 
-        pTci->hmacsign.plaindata = (uint32_t)plainMapInfo.sVirtualAddr;
+        pTci->hmacsign.plaindata = (uintptr_t)plainMapInfo.sVirtualAddr;
         pTci->hmacsign.plaindatalen = plainDataLength;
 
-        pTci->hmacsign.signaturedata = (uint32_t)signatureMapInfo.sVirtualAddr;
+        pTci->hmacsign.signaturedata = (uintptr_t)signatureMapInfo.sVirtualAddr;
         pTci->hmacsign.signaturedatalen = *signatureDataLength;
 
         pTci->hmacsign.digest = digest;
@@ -766,13 +767,13 @@ teeResult_t TEE_HMACVerify(
 
         /* Update TCI buffer */
         pTci->command.header.commandId = CMD_ID_TEE_HMAC_VERIFY;
-        pTci->hmacverify.keydata = (uint32_t)keyMapInfo.sVirtualAddr;
+        pTci->hmacverify.keydata = (uintptr_t)keyMapInfo.sVirtualAddr;
         pTci->hmacverify.keydatalen = keyDataLength;
 
-        pTci->hmacverify.plaindata = (uint32_t)plainMapInfo.sVirtualAddr;
+        pTci->hmacverify.plaindata = (uintptr_t)plainMapInfo.sVirtualAddr;
         pTci->hmacverify.plaindatalen = plainDataLength;
 
-        pTci->hmacverify.signaturedata = (uint32_t)signatureMapInfo.sVirtualAddr;
+        pTci->hmacverify.signaturedata = (uintptr_t)signatureMapInfo.sVirtualAddr;
         pTci->hmacverify.signaturedatalen = signatureDataLength;
 
         pTci->hmacverify.digest = digest;
@@ -896,9 +897,9 @@ teeResult_t TEE_KeyImport(
 
         /* Update TCI buffer */
         pTci->command.header.commandId = CMD_ID_TEE_KEY_IMPORT;
-        pTci->keyimport.keydata        = (uint32_t)keyMapInfo.sVirtualAddr;
+        pTci->keyimport.keydata        = (uintptr_t)keyMapInfo.sVirtualAddr;
         pTci->keyimport.keydatalen     = keyDataLength;
-        pTci->keyimport.sodata         = (uint32_t)soMapInfo.sVirtualAddr;
+        pTci->keyimport.sodata         = (uintptr_t)soMapInfo.sVirtualAddr;
         pTci->keyimport.sodatalen      = *soDataLength;
 
         /* Notify the trustlet */
@@ -1008,11 +1009,11 @@ teeResult_t TEE_GetPubKey(
 
         /* Update TCI buffer */
         pTci->command.header.commandId = CMD_ID_TEE_GET_PUB_KEY;
-        pTci->getpubkey.keydata        = (uint32_t)keyMapInfo.sVirtualAddr;
+        pTci->getpubkey.keydata        = (uintptr_t)keyMapInfo.sVirtualAddr;
         pTci->getpubkey.keydatalen     = keyDataLength;
-        pTci->getpubkey.modulus        = (uint32_t)modMapInfo.sVirtualAddr;
+        pTci->getpubkey.modulus        = (uintptr_t)modMapInfo.sVirtualAddr;
         pTci->getpubkey.moduluslen     = *modulusLength;
-        pTci->getpubkey.exponent       = (uint32_t)expMapInfo.sVirtualAddr;
+        pTci->getpubkey.exponent       = (uintptr_t)expMapInfo.sVirtualAddr;
         pTci->getpubkey.exponentlen    = *exponentLength;
 
         /* Notify the trustlet */

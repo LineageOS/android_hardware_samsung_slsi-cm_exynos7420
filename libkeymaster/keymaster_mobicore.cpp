@@ -122,7 +122,7 @@ static int exynos_km_generate_keypair(const keymaster0_device_t* dev,
 
     ret = TEE_RSAGenerateKeyPair(TEE_KEYPAIR_RSACRT, keyDataPtr.get(), RSA_KEY_BUFFER_SIZE,
 				rsa_params->modulus_size, (uint32_t)rsa_params->public_exponent,
-				keyBlobLength);
+				(uint32_t*)keyBlobLength);
     if (ret != TEE_ERR_NONE) {
         ALOGE("TEE_RSAGenerateKeyPair() is failed: %d", ret);
         return -1;
@@ -222,7 +222,7 @@ static int exynos_km_import_keypair(const keymaster0_device_t* dev,
 
     *key_blob_length = RSA_KEY_BUFFER_SIZE;
 
-    ret = TEE_KeyImport(kbuf, key_len, outPtr.get(), key_blob_length);
+    ret = TEE_KeyImport(kbuf, key_len, outPtr.get(), (uint32_t*)key_blob_length);
     if (ret != TEE_ERR_NONE) {
         ALOGE("TEE_KeyImport() is failed: %d", ret);
         return -1;
@@ -368,7 +368,7 @@ static int exynos_km_sign_data(const keymaster0_device_t* dev,
     void *tmpData = malloc(dataLength);
     memcpy(tmpData, data, dataLength);
     ret = TEE_RSASign(keyBlob, keyBlobLength, (const uint8_t *)tmpData, dataLength, signedDataPtr.get(),
-			signedDataLength, TEE_RSA_NODIGEST_NOPADDING);
+			(uint32_t*)signedDataLength, TEE_RSA_NODIGEST_NOPADDING);
     free(tmpData);
     if (ret != TEE_ERR_NONE) {
         ALOGE("TEE_RSASign() is failed: %d", ret);

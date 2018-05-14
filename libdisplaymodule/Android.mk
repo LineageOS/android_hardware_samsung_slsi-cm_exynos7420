@@ -34,8 +34,7 @@ LOCAL_C_INCLUDES := \
 	$(TOP)/hardware/samsung_slsi-cm/exynos/libexynosdisplay \
 	$(TOP)/hardware/samsung_slsi-cm/exynos/libmpp
 
-LOCAL_ADDITIONAL_DEPENDENCIES += \
-	$(TARGET_OUT_INTERMEDIATES)/KERNEL_OBJ/usr
+LOCAL_ADDITIONAL_DEPENDENCIES += INSTALLED_KERNEL_HEADERS
 
 LOCAL_SRC_FILES := \
 	ExynosPrimaryDisplay.cpp

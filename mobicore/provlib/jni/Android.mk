@@ -5,7 +5,7 @@ include $(CLEAR_VARS)
 LOCAL_MODULE      := libgdmcprov
 LOCAL_MODULE_TAGS := debug eng optional
 
-LOCAL_ADDITIONAL_DEPENDENCIES += $(TARGET_OUT_INTERMEDIATES)/KERNEL_OBJ/usr
+LOCAL_ADDITIONAL_DEPENDENCIES += INSTALLED_KERNEL_HEADERS
 
 LOCAL_C_INCLUDES  := $(LOCAL_PATH)/../inc_private \
                      $(LOCAL_PATH)/../inc_public \
